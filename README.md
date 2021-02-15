@@ -1,6 +1,6 @@
 Project was made with Python + Selenium.
 
-Here you can boost your instagram activity sending random people likes.
+Here you can boost your instagram activity, sending random people likes.
 
 How to use project:
 
