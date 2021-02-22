@@ -135,7 +135,16 @@ class InstagramBot:
 # for target in target_accounts:
 #     instagram.stealing_clients_with_likes(target, 1000)
 
+
+# Get People accounts
+# instagram = InstagramBot(username=account_info['insta_username'], password=account_info['insta_password'])
+# instagram.login_to_acc()
+# for target in target_accounts:
+#     instagram.stealing_clients_with_likes(target, 1000)
+
+
 # Send likes
 instagram = InstagramBot(username=account_info['insta_username'], password=account_info['insta_password'])
 instagram.login_to_acc()
 instagram.send_likes(300)
+
