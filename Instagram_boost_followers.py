@@ -2,7 +2,7 @@ from selenium import webdriver
 import time
 import chromedriver_binary
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -31,10 +31,21 @@ class InstagramBot:
 
         password_field = browser.find_element_by_xpath("//input[@name='password']")
         password_field.send_keys(self.password)
-        password_field.send_keys(Keys.RETURN)  # Keys.return как я понял нажимает submit button после заполнения полей
-
-        WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='aOOlW  bIiDR  ']")))
-        notification_window_submit_button = browser.find_element_by_xpath("//button[@class='aOOlW  bIiDR  ']").click()
+        password_field.send_keys(Keys.RETURN)
+        try:
+            WebDriverWait(browser, 2).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[@class='aOOlW  bIiDR  ']")))
+            notification_window_submit_button = browser.find_element_by_xpath(
+                "//button[@class='aOOlW  bIiDR  ']").click()
+        except TimeoutException:
+            WebDriverWait(browser, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[@class='sqdOP  L3NKy   y3zKF     ']")))
+            notification_window_submit_button = \
+                browser.find_element_by_xpath("//button[@class='sqdOP  L3NKy   y3zKF     ']").click()
+            WebDriverWait(browser, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[@class='aOOlW  bIiDR  ']")))
+            notification_window_submit_button = \
+                browser.find_element_by_xpath("//button[@class='aOOlW  bIiDR  ']").click()
 
     def stealing_clients_with_likes(self, target, acc_amount_to_get):
         browser = self.browser
@@ -82,10 +93,11 @@ class InstagramBot:
             browser = self.browser
             account_sum = sum(1 for line in open('unique_profiles.txt'))
             all_accounts = accounts_in_random_list("unique_profiles.txt", account_sum)
-            liked_accounts = open('all_liked_accounts.txt', 'w+')
+            all_liked_accounts = open('all_liked_accounts.txt', 'r')
+            all_liked_accounts_profiles = all_liked_accounts.readlines()
             likes_was_made = 0
             for account in all_accounts:
-                if account not in liked_accounts:
+                if account not in all_liked_accounts_profiles:
                     if likes_was_made <= amount_of_likes:
                         browser.get(account)
                         pic_hrefs = get_hrefs(browser)
@@ -111,8 +123,10 @@ class InstagramBot:
                     else:
                         browser.close()
                         exit()
+                else:
+                    pass
         except WebDriverException:
-            instagram.login_to_acc()
+            self.browser.close()
 
 
 # Get People accounts
