@@ -7,4 +7,4 @@ How to use project:
 Clone project, install requirements, set your instagram username and password
 and target profile in account_info.py.
 
-Navigate to instagram_boots_followers.py, at the bottom you can see step instructions.
+Navigate to instagram_boost_followers.py, at the bottom you can see step instructions.
